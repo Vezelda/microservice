@@ -1,8 +1,8 @@
-#Microservicio de Gestión de Inventario y Productos
+# Microservicio de Gestión de Inventario y Productos
 
 Este proyecto implementa un sistema de microservicios con FastAPI para la gestión de inventario y productos, utilizando RabbitMQ como sistema de mensajería. Incluye funcionalidades para agregar y consultar inventario, así como para crear y eliminar productos, comunicándose entre sí mediante colas de eventos.
 
-##Estructura del Proyecto
+## Estructura del Proyecto
 project-root/
 ├── modulo_inventario/
 │   └── gestion_inventario.py
@@ -12,7 +12,7 @@ project-root/
 ├── requirements.txt
 └── Dockerfile (opcional, para dockerizar servicios)
 
-##Requisitos Previos
+## Requisitos Previos
 
     Python 3.8+
     FastAPI como framework de desarrollo de microservicios.
@@ -22,34 +22,34 @@ project-root/
     Tenacity para reintentos en la conexión con RabbitMQ.
     PyBreaker para la implementación de Circuit Breakers.
 
-##Instalación y Configuración
+## Instalación y Configuración
 
     ###Clonar el Repositorio
 
 git clone https://github.com/tu_usuario/tu_repositorio.git
 cd tu_repositorio
 
-##Instalar dependencias
+## Instalar dependencias
 
-###Crea y activa un entorno virtual, luego instala las dependencias necesarias:
+### Crea y activa un entorno virtual, luego instala las dependencias necesarias:
 
 python3 -m venv microenv
 source microenv/bin/activate
 pip install -r requirements.txt
 
-##Configurar RabbitMQ
+## Configurar RabbitMQ
 
-###Ejecuta el contenedor de RabbitMQ (asegúrate de tener Docker instalado):
+### Ejecuta el contenedor de RabbitMQ (asegúrate de tener Docker instalado):
 
 docker run -d --hostname rabbitmq --name some-rabbit -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 
 Accede a la interfaz de administración de RabbitMQ en http://localhost:15672 con usuario guest y contraseña guest.
 
-##Configurar Bases de Datos SQLite
+## Configurar Bases de Datos SQLite
 
 Asegúrate de crear las bases de datos productos.db e inventario.db en la raíz del proyecto.
 
-#Ejecuta estos comandos en Python para crear las tablas necesarias:
+# Ejecuta estos comandos en Python para crear las tablas necesarias:
 
     import sqlite3
 
@@ -76,7 +76,7 @@ Asegúrate de crear las bases de datos productos.db e inventario.db en la raíz 
     conn.commit()
     conn.close()
 
-#Ejecución de los Servicios
+# Ejecución de los Servicios
 
 Para ejecutar cada servicio, usa uvicorn en cada archivo de microservicio, en puertos diferentes.
 
@@ -88,11 +88,11 @@ Para ejecutar cada servicio, usa uvicorn en cada archivo de microservicio, en pu
 
     uvicorn modulo_inventario.gestion_inventario:app --reload --port 8001
 
-#Endpoints y Ejemplos de Uso
+# Endpoints y Ejemplos de Uso
 
 1. Microservicio de Productos
 
-    ###Crear un producto
+    ### Crear un producto
 
         POST http://localhost:8000/productos/
 
@@ -105,12 +105,12 @@ Para ejecutar cada servicio, usa uvicorn en cada archivo de microservicio, en pu
           "categoria": "Categoría1"
         }
 
-    ###Eliminar un producto
+    ### Eliminar un producto
         DELETE http://localhost:8000/productos/{producto_id}
 
 2. Microservicio de Inventario
 
-    ###Agregar o actualizar inventario
+    ### Agregar o actualizar inventario
 
         POST http://localhost:8001/inventario/
 
@@ -121,17 +121,17 @@ Para ejecutar cada servicio, usa uvicorn en cada archivo de microservicio, en pu
       "cantidad": 50
     }
 
-    ###Consultar inventario de un producto
+    ### Consultar inventario de un producto
 
     GET http://localhost:8001/inventario/{producto_id}
 
-#Manejo de Errores y Resiliencia
+# Manejo de Errores y Resiliencia
 
     Circuit Breaker: Protege las conexiones a la base de datos y a RabbitMQ. Después de 3 intentos fallidos, se detendrán los intentos de conexión por 60 segundos.
 
     Reintentos: Si RabbitMQ está inactivo, el sistema intentará reconectar hasta 5 veces, con una espera de 2 segundos entre cada intento.
 
-#Problemas Comunes
+# Problemas Comunes
 
     Error de "Tabla no encontrada":
         Asegúrate de que las bases de datos productos.db e inventario.db están en la raíz del proyecto y contienen las tablas requeridas.
